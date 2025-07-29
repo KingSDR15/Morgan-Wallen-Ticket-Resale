@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
-      background: #001c23;
+      background: #02142b;
       color: #fff;
       padding: 20px;
     }
@@ -104,7 +104,11 @@
       max-width: 90%;
       text-align: center;
     }
-    .popup h2 { margin-bottom: 15px; }
+    .popup h2 { margin-bottom: 10px; }
+    .popup p {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
     .popup a {
       display: inline-flex;
       align-items: center;
@@ -135,9 +139,9 @@
 
   <div class="popup" id="contactPopup">
     <h2>Contact to Purchase</h2>
-    <p>Send your request to purchase this ticket:</p>
-    <a href="https://wa.me/15135692040" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    <a href="mailto:morganwallenresalestickets@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+    <p id="ticketDetails">Loading ticket info...</p>
+    <a id="whatsAppLink" href="#" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a id="emailLink" href="#"><i class="fas fa-envelope"></i> Email</a>
     <button class="popup-close" onclick="closePopup()">Close</button>
   </div>
 
@@ -145,9 +149,22 @@
     const grid = document.getElementById("ticketGrid");
     const popup = document.getElementById("contactPopup");
     const loader = document.getElementById("loader");
+    const ticketDetails = document.getElementById("ticketDetails");
+    const whatsAppLink = document.getElementById("whatsAppLink");
+    const emailLink = document.getElementById("emailLink");
 
     function closePopup() {
       popup.style.display = "none";
+    }
+
+    function openPopup(ticket) {
+      const message = `Hi, I'm interested in purchasing Ticket ID: ${ticket.id}%0AType: ${ticket.type}%0ASection: ${ticket.section}%0APrice: $${ticket.price}`;
+      const emailBody = `Hi,%0D%0AI'm interested in Ticket ID: ${ticket.id}%0D%0AType: ${ticket.type}%0D%0ASection: ${ticket.section}%0D%0APrice: $${ticket.price}`;
+
+      ticketDetails.innerText = `Ticket ID: ${ticket.id}\nType: ${ticket.type}\nSection: ${ticket.section}\nPrice: $${ticket.price}`;
+      whatsAppLink.href = `https://wa.me/15135692040?text=${message}`;
+      emailLink.href = `mailto:morganwallenresalestickets@gmail.com?subject=Ticket%20Purchase%20Request&body=${emailBody}`;
+      popup.style.display = "block";
     }
 
     function createTickets(count) {
@@ -159,14 +176,22 @@
         const sold = Math.random() < 0.33 && soldCount < 20;
         if (sold) soldCount++;
 
+        const ticket = {
+          id: i,
+          type: types[Math.floor(Math.random() * types.length)],
+          section: `Section ${sections[Math.floor(Math.random() * sections.length)]}, Row ${Math.floor(Math.random() * 20) + 1}`,
+          price: (150 + Math.random() * 250).toFixed(2),
+          sold: sold
+        };
+
         const card = document.createElement("div");
         card.className = "ticket-card";
         card.innerHTML = `
-          ${sold ? '<div class="sold-badge">SOLD</div>' : ''}
-          <h3>${types[Math.floor(Math.random()*types.length)]}</h3>
-          <p><strong>Section:</strong> ${sections[Math.floor(Math.random()*sections.length)]}, Row ${Math.floor(Math.random()*20)+1}</p>
-          <p><strong>Price:</strong> $${(150 + Math.random()*250).toFixed(2)}</p>
-          ${!sold ? '<div class="contact-area"><button onclick="popup.style.display=\'block\'">Buy Now</button></div>' : ''}
+          ${ticket.sold ? '<div class="sold-badge">SOLD</div>' : ''}
+          <h3>${ticket.type}</h3>
+          <p><strong>Section:</strong> ${ticket.section}</p>
+          <p><strong>Price:</strong> $${ticket.price}</p>
+          ${!ticket.sold ? `<div class="contact-area"><button onclick='openPopup(${JSON.stringify(ticket)})'>Buy Now</button></div>` : ''}
         `;
         grid.appendChild(card);
       }
