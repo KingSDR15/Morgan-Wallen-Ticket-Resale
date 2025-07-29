@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your Ticket | Morgan Wallen Resale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #ffcf33;
+      margin-bottom: 20px;
+    }
+    form {
+      background: #222;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 207, 51, 0.3);
+      max-width: 500px;
+      width: 100%;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #333;
+      color: #fff;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #ffcf33;
+      color: #000;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #f5be00;
+    }
+    .back-link {
+      margin-top: 20px;
+      color: #ffcf33;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .contact-icons {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+    .contact-icons a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #ffcf33;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .contact-icons i {
+      font-size: 1.3rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>List Your Ticket & Submit</h1>
+  <form id="ticketForm">
+    <label for="name">Your Full Name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="ticketType">Ticket Type</label>
+    <select id="ticketType" name="ticketType" required>
+      <option value="">Select...</option>
+      <option value="General Admission">General Admission</option>
+      <option value="VIP">VIP</option>
+      <option value="Floor Seat">Floor Seat</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="seatDetails">Seat / Section Details</label>
+    <input type="text" id="seatDetails" name="seatDetails" placeholder="e.g. Section B, Row 12">
+
+    <label for="price">Price (USD)</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="contact">Your Contact (Email or WhatsApp)</label>
+    <input type="text" id="contact" name="contact" required>
+
+    <button type="button" onclick="downloadPDF()">Download Ticket Info</button>
+  </form>
+
+  <div class="contact-icons">
+    <a href="https://wa.me/15135692040" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="mailto:morganwallenresalestickets@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+  </div>
+
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <script>
+    function downloadPDF() {
+      const name = document.getElementById("name").value;
+      const type = document.getElementById("ticketType").value;
+      const seat = document.getElementById("seatDetails").value;
+      const price = document.getElementById("price").value;
+      const contact = document.getElementById("contact").value;
+
+      const content = `Ticket Listing\n\nName: ${name}\nTicket Type: ${type}\nSeat: ${seat}\nPrice: $${price}\nContact: ${contact}`;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "MorganWallen_Ticket.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
